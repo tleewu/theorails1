@@ -2,30 +2,33 @@ require 'webrick'
 require_relative './controller_base'
 require 'active_support'
 require 'active_support/core_ext'
+require_relative './sqlobject'
 
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick.html
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick/HTTPRequest.html
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick/HTTPResponse.html
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick/Cookie.html
 
-class Cat
+class Cat < SQLObject
   attr_reader :name, :owner
 
-  def self.all
-    @cat ||= []
-  end
+  # def self.all
+  #   @cat ||= []
+  # end
 
   def initialize(params = {})
-    params ||= {}
-    @name, @owner = params["name"], params["owner"]
+    # params ||= {}
+    # @name, @owner = params["name"], params["owner"]
+    p params
+    super(params)
   end
 
-  def save
-    return false unless @name.present? && @owner.present?
-
-    Cat.all << self
-    true
-  end
+  # def save
+  #   return false unless @name.present? && @owner.present?
+  #
+  #   Cat.all << self
+  #   true
+  # end
 
   def inspect
     { name: name, owner: owner }.inspect
@@ -34,8 +37,10 @@ end
 
 class CatsController < ControllerBase
   def create
+    print "kaljsdlkjsa"
     @cat = Cat.new(params["cat"])
     if @cat.save
+      print "THEO WU"
       redirect_to("/cats")
     else
       render :new

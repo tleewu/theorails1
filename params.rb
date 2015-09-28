@@ -27,11 +27,11 @@ class Params
       if hash_combo.join("").split("").include?("[")
         hash_combo = parse_key(hash_combo.join(""))
       end
-
       current_params = @params
       hash_combo.each_with_index do |key,idx|
         if idx == hash_combo.length - 2
           current_params[key] = hash_combo[-1]
+          break
         else
           if current_params[key]
             current_params = current_params[key]
